@@ -1,0 +1,18 @@
+# Nixpacks config for Railway — used when no Dockerfile is present.
+# Railway auto-detects Node.js, this file just tunes it.
+[phases.setup]
+nixPkgs = ['...', 'tini', 'ca-certificates']
+
+[phases.install]
+cmds = ['npm ci --omit=dev']
+
+[phases.build]
+cmds = ['echo "No build step needed"']
+
+[start]
+# tini handles signals properly (SIGTERM from Railway on redeploy)
+cmd = 'tini -- node server.js'
+
+# Railway healthcheck — marks service as ready when /health returns 200
+[variables]
+HEALTHCHECK_PATH = '/health'

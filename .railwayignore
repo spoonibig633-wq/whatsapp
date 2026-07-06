@@ -1,0 +1,12 @@
+node_modules
+sessions
+media
+config.json
+.env
+.git
+.gitignore
+README.md
+*.log
+.DS_Store
+.vscode
+.idea

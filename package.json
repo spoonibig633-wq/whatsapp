@@ -1,0 +1,24 @@
+{
+  "name": "whatsapp-wish-bot",
+  "version": "1.0.0",
+  "description": "24/7 WhatsApp bot that sends Groq-generated birthday wishes every 5 minutes and media every hour, configurable via web dashboard.",
+  "main": "server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@hapi/boom": "^10.0.1",
+    "@whiskeysockets/baileys": "^6.7.18",
+    "express": "^4.19.2",
+    "groq-sdk": "^0.7.0",
+    "node-cron": "^3.0.3",
+    "pino": "^9.4.0",
+    "qrcode": "^1.5.4",
+    "sharp": "^0.33.5"
+  }
+}

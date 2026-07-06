@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WhatsApp Wish Bot</title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<header>
+  <div class="brand">
+    <span class="logo">🎂</span>
+    <div>
+      <h1>WhatsApp Wish Bot</h1>
+      <p class="tag">Groq-powered birthday wishes · 24/7</p>
+    </div>
+  </div>
+  <div id="wa-status" class="status-pill init">
+    <span class="dot"></span>
+    <span class="label">Initializing…</span>
+  </div>
+</header>
+
+<main>
+  <!-- QR / connect section -->
+  <section id="qr-section" class="card hidden">
+    <h2>Scan WhatsApp QR</h2>
+    <p>Open WhatsApp → Settings → Linked Devices → Link a Device → scan the code below.</p>
+    <div class="qr-wrap">
+      <img id="qr-img" alt="QR code" />
+    </div>
+    <p class="hint">QR auto-refreshes. Session is saved in <code>/sessions</code> so you only scan once.</p>
+  </section>
+
+  <!-- Connected user info -->
+  <section id="user-section" class="card hidden">
+    <h2>Connected ✓</h2>
+    <p>Logged in as <strong id="user-name"></strong> (<code id="user-id"></code>)</p>
+    <button class="btn danger" id="btn-logout">Logout & wipe session</button>
+  </section>
+
+  <!-- Config -->
+  <section class="card">
+    <h2>Wish Settings</h2>
+    <div class="grid two">
+      <label>
+        <span>Birthday person's name</span>
+        <input id="cfg-name" type="text" placeholder="e.g. Aarav" />
+      </label>
+      <label>
+        <span>Age (optional)</span>
+        <input id="cfg-age" type="number" min="1" max="120" placeholder="e.g. 25" />
+      </label>
+      <label>
+        <span>Relation</span>
+        <select id="cfg-relation"></select>
+      </label>
+      <label>
+        <span>Style</span>
+        <select id="cfg-style"></select>
+      </label>
+      <label>
+        <span>Start time (24h)</span>
+        <input id="cfg-start" type="time" />
+      </label>
+      <label>
+        <span>End time (24h)</span>
+        <input id="cfg-end" type="time" />
+      </label>
+    </div>
+
+    <div class="grid two">
+      <label class="checkbox">
+        <input id="cfg-wishes-on" type="checkbox" />
+        <span>Wishes enabled (every <strong id="wish-interval">5</strong> min within window)</span>
+      </label>
+      <label class="checkbox">
+        <input id="cfg-media-on" type="checkbox" />
+        <span>Media enabled (every <strong id="media-interval">60</strong> min)</span>
+      </label>
+      <label>
+        <span>Media mode</span>
+        <select id="cfg-media-mode">
+          <option value="random">Random pick</option>
+          <option value="sequential">Sequential (loop)</option>
+        </select>
+      </label>
+      <label class="checkbox" style="align-self:end">
+        <span>Timezone: <strong id="tz-label">—</strong></span>
+      </label>
+    </div>
+
+    <div class="actions">
+      <button class="btn primary" id="btn-save">Save settings</button>
+      <button class="btn" id="btn-test-wish">Generate test wish</button>
+      <button class="btn" id="btn-send-now-wish">Send wish now</button>
+      <button class="btn" id="btn-send-now-media">Send media now</button>
+    </div>
+  </section>
+
+  <!-- Test wish preview -->
+  <section id="wish-preview" class="card hidden">
+    <h2>Generated wish preview</h2>
+    <div id="wish-text" class="wish-text"></div>
+    <label class="checkbox">
+      <input id="send-to-first" type="checkbox" checked />
+      <span>Also send to first target</span>
+    </label>
+  </section>
+
+  <!-- Targets -->
+  <section class="card">
+    <h2>Recipients</h2>
+    <p class="hint">Add phone numbers (with country code, no +) or group IDs. Examples: <code>919876543210</code>, <code>120363xxx@g.us</code></p>
+    <div class="grid two">
+      <input id="target-name" type="text" placeholder="Name (e.g. Mom)" />
+      <input id="target-jid" type="text" placeholder="Phone or group ID" />
+    </div>
+    <button class="btn primary" id="btn-add-target">Add recipient</button>
+
+    <table id="targets-table">
+      <thead><tr><th>Name</th><th>JID</th><th></th></tr></thead>
+      <tbody></tbody>
+    </table>
+    <p id="targets-empty" class="hint">No recipients yet.</p>
+  </section>
+
+  <!-- Media -->
+  <section class="card">
+    <h2>Media folder</h2>
+    <p class="hint">Drop images and videos in <code>/media</code> on the server, or upload below. Files are sent every hour.</p>
+
+    <div class="upload">
+      <input id="upload-file" type="file" accept="image/*,video/*" multiple />
+      <button class="btn" id="btn-upload">Upload selected</button>
+    </div>
+
+    <table id="media-table">
+      <thead><tr><th>File</th><th>Type</th><th>Size</th><th></th></tr></thead>
+      <tbody></tbody>
+    </table>
+    <p id="media-empty" class="hint">No media files yet.</p>
+  </section>
+
+  <!-- Activity log -->
+  <section class="card">
+    <h2>Activity log (last 50)</h2>
+    <div id="log-list" class="log-list"></div>
+  </section>
+</main>
+
+<footer>
+  <p>WhatsApp Wish Bot · runs 24/7 · session persisted in <code>/sessions</code></p>
+</footer>
+
+<script src="/app.js"></script>
+</body>
+</html>
